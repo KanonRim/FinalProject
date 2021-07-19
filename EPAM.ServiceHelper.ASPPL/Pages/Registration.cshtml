@@ -1,0 +1,79 @@
+﻿@using EPAM.ServiceHelper.Entities
+@{
+    var logic = DependencyResolver.Instance.Logic;
+    Layout = "~/Pages/Layaout/_LayoutBase.cshtml";
+
+
+    int users = logic.GetEmployees().ToArray().Length;
+
+    if (users != 0)
+    {
+        Response.Redirect("~");
+    }
+
+    if (IsPost)
+    {
+
+        logic.AddEmployee(
+            name: Request["name"],
+            phoneNumber: Request["phonNumber"],
+            comment: Request["comment"],
+            perm: (Permissions)Enum.Parse(typeof(Permissions), Request["perm"]),
+            passHash: ServiceAuthentication.Instance.HashPassword(Request["password"])
+            );
+        Response.Redirect("~/Index.cshtml");
+    }
+}
+
+<form id="regForm" action="~/Pages/Registration.cshtml" method="post">
+    <fieldset class="registration">
+        <h1>Регистрация </h1>
+        <hr>
+        <div class="block-registration">
+            <label  for="login">Имя пользователя</label>
+            <input name="name" type="text" id="login required ">
+            <label name="phonNumber" for="phonNumber">Номер телефона</label>
+
+            <input id="phonNumber" class="inputBorder" type="text" name="phonNumber"
+                   minlength="6" maxlength="12"
+                   placeholder="+7 927 222 22 22"
+                   required pattern="^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$">
+        </div>
+        <div class="block-registration">
+            <label for="password">Пароль</label> <br>
+            <input name="password" id="password" type="password" minlength="6" maxlength="50"
+                   placeholder="password" required>
+            <label for="password-again">Ещё раз</label><br>
+            <input id="password-again" type="password" minlength="6" maxlength="50"
+                   placeholder="password" required>
+        </div> <br>
+        <input name="comment" type="hidden" value="Owner" />
+        <input name="perm" type="hidden" value=@Permissions.admin />
+        <div class="block-registration">
+            <input class="button-registration" type="submit" id="input" value="Отправить">
+        </div>
+    </fieldset>
+
+</form>
+
+<script>
+
+        form = document.getElementById("regForm");
+
+        form.onsubmit = function () {
+            let pas = document.getElementById('password');
+            let pasAgain = document.getElementById('password-again');
+            if (pas.value != pasAgain.value) {
+                pasAgain.setCustomValidity("Пароли не совпадают");
+                console.log(pas.value + "Passwords don't match" + pasAgain.value);
+                return false; // prevent the form from submitting
+            } else {
+                pasAgain.setCustomValidity('');
+            }
+        }
+
+        document.getElementById("password-again").onchange = function (e) {
+            e.target.setCustomValidity('')
+        }
+
+    </script>

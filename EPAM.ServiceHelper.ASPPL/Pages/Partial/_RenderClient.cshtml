@@ -1,0 +1,29 @@
+﻿@using EPAM.ServiceHelper.Entities
+@{
+
+    try
+    {
+
+        var id = PageData[0];
+        Person client = DependencyResolver.Instance.Logic.GetClient(id);
+
+        <label>Имя </label>
+        <input type="text" value="@client.Name" readonly>
+        <label>Номер телефона</label>
+        <input class="inputBorder" value="@client.PhonNuber" readonly>
+
+    }
+    catch
+    {
+
+        <label>Имя </label>
+        <input type="text" value="Не найден" readonly>
+        <label>Номер телефона</label>
+        <input class="inputBorder" value="Не найдено" readonly>
+
+    }
+}
+
+
+
+

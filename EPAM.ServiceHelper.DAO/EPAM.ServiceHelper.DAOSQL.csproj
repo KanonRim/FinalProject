@@ -45,5 +45,15 @@
     <Compile Include="DAOSQL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary1\EPAM.ServiceHelper.InterfaceDAL.csproj">
+      <Project>{9c647d06-ef8b-428d-ad1a-1df48f70e118}</Project>
+      <Name>EPAM.ServiceHelper.InterfaceDAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EPAM.ServiceHelper.Entities\EPAM.ServiceHelper.Entities.csproj">
+      <Project>{b92f7e50-01b8-437d-b3c1-8d7b80c692be}</Project>
+      <Name>EPAM.ServiceHelper.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,44 @@
+﻿@using EPAM.ServiceHelper.Entities
+@{
+    try
+    {
+        Order order = PageData[0];
+        Status status = order.Status;
+
+
+        switch (status)
+        {
+            case Status.notProcessed:
+                <p class="status" style="background: #43a047">Новый</p>
+                break;
+            case Status.inWork:
+                <p class="status" style="background: #6395F2">В работе </p>
+                break;
+            case Status.waiting:
+                <p class="status" style="background: #FDED2A">Ждёт запчасть</p>
+                break;
+            case Status.forApproval:
+                <p class="status" style="background: #FDED2A">На согласовании</p>
+                break;
+            case Status.ready:
+                <p class="status" style="background: #347B98">Готов</p>
+                break;
+            case Status.closed:
+                <p class="status" style="background: #ECF3E7">Закрыт</p>
+                break;
+            default:
+                break;
+        }
+    }
+
+    catch
+    {
+
+        <p> Ошибка при определнии статуса </p>
+
+
+    }
+}
+
+
+

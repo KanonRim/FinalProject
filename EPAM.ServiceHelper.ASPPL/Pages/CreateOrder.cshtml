@@ -1,0 +1,113 @@
+﻿@using EPAM.ServiceHelper.Entities
+@{
+    Layout = Layout = "~/Pages/Layaout/_LayoutBase.cshtml";
+
+    if (!User.IsInRole("user"))
+    {
+        Response.Redirect("~");
+    }
+
+    var Clents = DependencyResolver.Instance.Logic.GetClients();
+    var logic = DependencyResolver.Instance.Logic;
+    if (IsPost)
+    {
+        if (Request["idClient"] == "New")
+        {
+            var client = logic.AddClient(
+                     name: Request["Name"],
+                     phonNumber: Request["phonNumber"],
+                     comment: Request["comment"]);
+
+            logic.AddOrder(
+            status: Status.notProcessed,
+            client: client,
+            dateCreation: DateTime.Now,
+            equipment: Request["equipment"],
+            comment: Request["comment"],
+            device: Request["device"]);
+
+        }
+        else
+        {
+
+            logic.AddOrder(
+            status: Status.notProcessed,
+            client: logic.GetClient(int.Parse(Request["idClient"])),
+            dateCreation: DateTime.Now,
+            equipment: Request["equipment"],
+            comment: Request["comment"],
+            device: Request["device"]);
+        }
+    }
+}
+
+<h1>Новый заказ</h1>
+
+<form class="" action="~/Pages/CreateOrder.cshtml" method="post">
+
+    Клиент: <select name="idClient" id="clientContainer" value="New">
+        <option value="New">Новый клиент</option>
+        @foreach (var item in Clents)
+        {
+            <option value=@item.Id selected> @item.Name</option>
+        }
+
+    </select>
+
+    @foreach (var item in Clents)
+    {
+        <fieldset id=@item.Id style="display: none">
+            @RenderPage("~/Pages/Partial/_RenderClient.cshtml", item.Id)
+        </fieldset>
+    }
+
+    <div id="newClient">
+        @RenderPage("~/Pages/Partial/_FeldsetClient.cshtml")
+    </div>
+
+    <fieldset>
+        <legend>
+            Устройство
+        </legend>
+        <p>
+            <label>Наименование</label>
+            <input type="text" name="device" minlength="3" maxlength="50">
+        </p>
+        <p>
+            <label>Комплектация</label>
+            <input type="text" name="equipment" minlength="0" maxlength="50">
+        </p>
+        <p>
+            <label>Комментарий</label>
+            <input type="text" name="comment" minlength="0" maxlength="50">
+        </p>
+
+    </fieldset>
+    <input type="submit" />
+</form>
+
+<script>
+
+        let lastIdClient = null;
+        let newClient = document.getElementById('newClient');
+        document.getElementById('clientContainer').onchange = function () {
+            
+            let idClient = document.getElementById('clientContainer').value;
+            if (idClient == "New") {
+                newClient.style.display = 'flex';
+                newClient.disabled = false;
+                if (lastIdClient) {
+                    document.getElementById(lastIdClient).style.display = 'none';
+                }
+            }
+            else {
+                newClient.style.display = 'none';
+                newClient.disabled = true;
+                if (lastIdClient) {
+                    document.getElementById(lastIdClient).style.display = 'none';
+                }
+                lastIdClient = idClient;
+                document.getElementById(idClient).style.display = 'flex';
+            }
+        }
+</script>

@@ -1,0 +1,156 @@
+body {
+    font-size: x-large;
+    margin:0;
+}
+
+button {
+    color: white;
+    border-radius: 5px;
+    border-width: 0;
+}
+
+tr {
+    display: flex;
+    flex-direction: row;
+}
+
+td {
+    min-width: 12%;
+    min-height: 30px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    word-wrap: break-word;
+    justify-content: center;
+    margin-right: 2px;
+}
+
+.mainContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.contentContainer {
+    padding-left: 10px;
+    display: flex;
+    flex-direction: column;
+    flex: 18;
+}
+
+.hiddenMenu {
+    background-color: #607d8b;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+    font-size: 32px;
+    color: white;
+    display: none;
+    margin: 0;
+}
+
+.leftMenu {
+  padding: 0 1%;
+
+}
+
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.menuBtn {
+    background-color: #607d8b;
+    width: 100%;
+    font-size: x-large;
+    text-align: start;
+    color: aliceblue;
+    text-decoration: none;
+    
+    margin: 10px auto;
+    text-align: left;
+}
+
+.searchContainer {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 15px;
+}
+
+.headerBtn {
+    background-color: green;
+    width: 120px;
+    height: 40px;
+    border-width: 0px;
+    border-radius: 4px;
+}
+
+
+.headerTitle {
+    font-size: 20px;
+}
+
+.searchBtn {
+    background-color: cornflowerblue;
+    border-radius: 0;
+}
+
+.orderBtn {
+    padding: 8px;
+    background-color: #43a047;
+    color: aliceblue;
+    text-decoration: none;
+    border-radius: 10px;
+}
+
+.filterBtn {
+    color: black;
+    background-color: white;
+    border-color: grey;
+    border-width: 1px;
+}
+
+.tableHeader {
+    background-color: #607d8b;
+    color: aliceblue;
+}
+
+.status {
+    border-radius: 10px;
+    color: white;
+}
+
+
+
+
+.inputBorder:invalid {
+    border: 2px solid red;
+}
+
+.inputBorder:valid {
+    border: 2px solid black;
+}
+
+.registration {
+    background-color: cornflowerblue;
+    color: cornsilk;
+    width: 95%;
+}
+
+.button-registration {
+    background-color: gold;
+    padding: 2%;  
+}
+
+.block-registration {
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 2%;
+    width: 80%;
+}
+.block-registration > * {
+        width: 100%;
+}

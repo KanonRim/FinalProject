@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5D1D69B5-AE72-4765-9025-3346EE5A019A}</ProjectGuid>
+    <ProjectGuid>{9C647D06-EF8B-428D-AD1A-1DF48F70E118}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EPAM.ServiceHelper.BLL</RootNamespace>
-    <AssemblyName>EPAM.ServiceHelper.BLL</AssemblyName>
+    <RootNamespace>ClassLibrary1</RootNamespace>
+    <AssemblyName>ClassLibrary1</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,21 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ServiceHelperBLL.cs" />
+    <Compile Include="IDAO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary1\EPAM.ServiceHelper.InterfaceDAL.csproj">
-      <Project>{9C647D06-EF8B-428D-AD1A-1DF48F70E118}</Project>
-      <Name>EPAM.ServiceHelper.InterfaceDAL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EPAM.ServiceHelper.Entities\EPAM.ServiceHelper.Entities.csproj">
-      <Project>{B92F7E50-01B8-437D-B3C1-8D7B80C692BE}</Project>
+      <Project>{b92f7e50-01b8-437d-b3c1-8d7b80c692be}</Project>
       <Name>EPAM.ServiceHelper.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EPAM.ServiceHelper.InterfaceBLL\EPAM.ServiceHelper.InterfaceBLL.csproj">
-      <Project>{59531789-E0F5-40A9-A5AA-123CF624C02B}</Project>
-      <Name>EPAM.ServiceHelper.InterfaceBLL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

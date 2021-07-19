@@ -1,0 +1,51 @@
+﻿@using EPAM.ServiceHelper.Entities
+@{
+    Layout = Layout = "~/Pages/Layaout/_LayoutBase.cshtml";
+
+    var logic = DependencyResolver.Instance.Logic;
+
+
+    int users = logic.GetEmployees().ToArray().Length;
+
+    if (users == 0)
+    {
+        Response.Redirect("~/Pages/Registration.cshtml");
+    }
+
+    if (IsPost)
+    {
+
+        string name = Request["name"];
+        string pass = Request["password"];
+        if (ServiceAuthentication.Instance.CanLogin(name.Trim(), pass))
+        {
+            FormsAuthentication.SetAuthCookie(name.Trim(), createPersistentCookie: true);
+            Response.Redirect("~/Index.cshtml");
+        }
+        else
+        {
+            <h4>Не удалось войти, попробуйте снова</h4>
+
+        }
+
+    }
+}
+
+
+<form action="~/Pages/SingIn.cshtml" method="post">
+    <fieldset class="registration">
+        <h1>Вход</h1>
+        <hr>
+        <div class="block-registration">
+            <label for="login">Имя пользователя</label><br>
+            <input name="name" type="text" id="login">
+        </div>
+        <div class="block-registration">
+            <label for="password">Пароль</label> <br>
+            <input name="password" type="password" id="password">
+        </div>
+        <div class="block-registration">
+            <input class="button-registration" type="submit" id="input" value="Отправить">
+        </div>
+    </fieldset>
+</form>

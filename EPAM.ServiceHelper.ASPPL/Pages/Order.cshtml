@@ -1,0 +1,87 @@
+﻿@using EPAM.ServiceHelper.Entities
+@using EPAM.ServiceHelper.InterfaceBLL
+@{
+    Layout = "~/Pages/Layaout/_LayoutBase.cshtml";
+
+    if (!User.IsInRole("user"))
+    {
+        Response.Redirect("~");
+    }
+
+    int id = Convert.ToInt32(Request.QueryString["id"]);
+    var logic = DependencyResolver.Instance.Logic;
+    Order order = logic.GetOrder(id);
+
+    if (order == null)
+    {
+        throw new Exception("Не найден заказ");
+    }
+
+    <div class="block-registration">
+        <p>Клиент</p>
+        @RenderPage("~/Pages/Partial/_RenderClient.cshtml", order.Client.Id)
+
+        <p>Номер заказа: @order.Id</p>
+        <p>Создан: @order.DateCreation </p>
+        <p>Устройство @order.Device</p>
+        <p>Комплектация @order.Equipment</p>
+        <p> @RenderPage("~/Pages/Partial/_RenderStatus.cshtml", order)</p>
+        <p>
+            Работа и материалы
+            Добавить
+        </p>
+        <form action="~/Pages/CreateWorkForm.cshtml" method="post" target="_blank">
+            <input type="hidden" name="idOrder" value=@order.Id />
+            <input type="hidden" name="idEmployee" value=@logic.GetEmployeeByName(User.Identity.Name).Id />
+            <div>
+                <label>Название работы или продукта</label>
+                <input name="name" type="text" maxlength="50" />
+            </div>
+            <div>
+                <label>Цена</label>
+                <input name="price" type="number" min="0" />
+            </div>
+            <div>
+                <label>Комментарий</label>
+                <input name="comment" type="text" maxlength="50" />
+            </div>
+            <div>
+                <label>Конечная дата</label>
+
+
+
+                <input name="date" type="date" value=@DateTime.Now.AddDays(7) min=@DateTime.Now.ToString("s")>
+            </div>
+            <input type="submit" value=" добавить работу" />
+        </form>
+    </div>
+    <script>
+
+        let lastIdClient = null;
+        let newClient = document.getElementById('newClient');
+        document.getElementById('clientContainer').onchange = function () {
+            alet();
+            let idClient = document.getElementById('clientContainer').value;
+            if (idClient == "New") {
+                newClient.style.display = 'flex';
+                newClient.disabled = false;
+                if (lastIdClient) {
+                    document.getElementById(lastIdClient).style.display = 'none';
+                }
+            }
+            else {
+                newClient.style.display = 'none';
+                newClient.disabled = true;
+                if (lastIdClient) {
+                    document.getElementById(lastIdClient).style.display = 'none';
+                }
+                lastIdClient = idClient;
+                document.getElementById(idClient).style.display = 'flex';
+            }
+        }
+    </script>
+}
+
+
+
+

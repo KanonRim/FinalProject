@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5D1D69B5-AE72-4765-9025-3346EE5A019A}</ProjectGuid>
+    <ProjectGuid>{8EA2EED8-84C2-4880-BD72-33C7111AD28A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EPAM.ServiceHelper.BLL</RootNamespace>
-    <AssemblyName>EPAM.ServiceHelper.BLL</AssemblyName>
+    <RootNamespace>Dependencies</RootNamespace>
+    <AssemblyName>Dependencies</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,20 +41,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ServiceHelperBLL.cs" />
+    <Compile Include="DependencyResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClassLibrary1\EPAM.ServiceHelper.InterfaceDAL.csproj">
-      <Project>{9C647D06-EF8B-428D-AD1A-1DF48F70E118}</Project>
+      <Project>{9c647d06-ef8b-428d-ad1a-1df48f70e118}</Project>
       <Name>EPAM.ServiceHelper.InterfaceDAL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EPAM.ServiceHelper.Entities\EPAM.ServiceHelper.Entities.csproj">
-      <Project>{B92F7E50-01B8-437D-B3C1-8D7B80C692BE}</Project>
-      <Name>EPAM.ServiceHelper.Entities</Name>
+    <ProjectReference Include="..\EPAM.ServiceHelper.BLL\EPAM.ServiceHelper.BLL.csproj">
+      <Project>{5D1D69B5-AE72-4765-9025-3346EE5A019A}</Project>
+      <Name>EPAM.ServiceHelper.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EPAM.ServiceHelper.DAO\EPAM.ServiceHelper.DAOSQL.csproj">
+      <Project>{BC7B663D-4192-4CAA-AA87-B155ADB1BCF4}</Project>
+      <Name>EPAM.ServiceHelper.DAOSQL</Name>
     </ProjectReference>
     <ProjectReference Include="..\EPAM.ServiceHelper.InterfaceBLL\EPAM.ServiceHelper.InterfaceBLL.csproj">
-      <Project>{59531789-E0F5-40A9-A5AA-123CF624C02B}</Project>
+      <Project>{59531789-e0f5-40a9-a5aa-123cf624c02b}</Project>
       <Name>EPAM.ServiceHelper.InterfaceBLL</Name>
     </ProjectReference>
   </ItemGroup>

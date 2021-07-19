@@ -8,33 +8,26 @@ namespace EPAM.ServiceHelper.Entities
 {
     public class Person
     {
-        string name;
-        string phonNuber;
-        string comment;
+        public int Id { get; }
+        public string Name { get; set; }
+        public string PhonNuber { get; set; }
+        public string Comment { get; set; }
 
-        public Person(string name, string phonNuber, string comment)
+
+        public Person(int id,string name, string phonNumber, string comment)
         {
-            this.name = name;
-            this.phonNuber = phonNuber;
-            this.comment = comment;
+            Id = id;
+            Name = name;
+            PhonNuber = phonNumber;
+            Comment = comment;
         }
-    }
 
-
-    public class Employee : Person
-    {
-       
-        public Employee(string name, string phonNuber, string comment) : base(name, phonNuber, comment)
-        {
-            
-        }
     }
 
     public class Client : Person
     {
-        public Client(string name, string phonNuber, string comment) : base(name, phonNuber, comment)
+        public Client(int id, string name, string phonNumber, string comment) : base(id, name, phonNumber, comment)
         {
-
         }
     }
 }
