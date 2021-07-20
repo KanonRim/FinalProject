@@ -1,0 +1,133 @@
+﻿@using EPAM.ServiceHelper.Entities
+@using NLog
+@{
+    Layout = Layout = "~/Pages/Layaout/_LayoutLeftMenu.cshtml";
+
+    if (!User.IsInRole("user"))
+    {
+        Response.Redirect("~");
+    }
+
+
+    var logger = LogManager.GetCurrentClassLogger();
+    var Clients = DependencyResolver.Instance.Logic.GetClients();
+    var logic = DependencyResolver.Instance.Logic;
+
+    try
+    {
+
+        if (IsPost)
+        {
+            if (Request["idClient"] == "New")
+            {
+                var client = logic.AddClient(
+                            name: Request["Name"],
+                            phonNumber: Request["phonNumber"],
+                            comment: Request["comment"]);
+
+                logic.AddOrder(
+                status: Status.notProcessed,
+                client: client,
+                dateCreation: DateTime.Now,
+                equipment: Request["equipment"],
+                comment: Request["comment-device"],
+                device: Request["device"]);
+            }
+            else
+            {
+                logic.AddOrder(
+                status: Status.notProcessed,
+                client: logic.GetClient(int.Parse(Request["idClient"])),
+                dateCreation: DateTime.Now,
+                equipment: Request["equipment"],
+                comment: Request["comment-device"],
+                device: Request["device"]);
+            }
+        }
+    }
+    catch (Exception e)
+    {
+        logger.Warn(e);
+        Response.Redirect("~/Pages/ErrorPage.cshtml");
+    }
+
+
+}
+
+@section title {
+    Новый заказ
+}
+<h3>Новый заказ</h3>
+
+<form class="" action="~/Pages/CreateOrder.cshtml" method="post">
+
+    <label>Клиент: </label> <select class="form-control" name="idClient" id="clientContainer">
+
+        @foreach (var item in Clients)
+            {
+        <option value=@item.Id selected> @item.Name</option>
+            }
+        <option selected value="New">Новый клиент</option>
+    </select>
+
+    @foreach (var item in Clients)
+        {
+    <fieldset id=@item.Id style="display: none">
+        @RenderPage("~/Pages/Partial/_RenderClient.cshtml", item.Id)
+    </fieldset>
+}
+
+    <div id="newClient" disabled>
+        @RenderPage("~/Pages/Partial/_FeldsetClient.cshtml")
+    </div>
+
+    <fieldset>
+        <legend>
+            Устройство
+        </legend>
+        <p>
+            <label>Наименование</label>
+            <input class="form-control" type="text" name="device" minlength="3" maxlength="50" required>
+        </p>
+        <p>
+            <label>Комплектация</label>
+            <input class="form-control" type="text" name="equipment" minlength="0" maxlength="50">
+        </p>
+        <p>
+            <label>Комментарий</label>
+            <input class="form-control" type="text" name="comment-device" minlength="0" maxlength="50" required>
+        </p>
+
+    </fieldset>
+    <input class="btn col-4  btn-primary" type="submit" />
+</form>
+
+<script>
+
+    let lastIdClient = null;
+    let newClient = document.getElementById('newClient');
+    document.getElementById('clientContainer').onchange = function () {
+
+        let idClient = document.getElementById('clientContainer').value;
+        if (idClient == "New") {
+            newClient.style.display = 'flex';
+            document.getElementById('newClient-name').disabled = false;
+            document.getElementById('newClient-phoneNumber').disabled = false;
+            document.getElementById('newClient-comment').disabled = false;
+            if (lastIdClient) {
+                document.getElementById(lastIdClient).style.display = 'none';
+            }
+        }
+        else {
+            newClient.style.display = 'none';
+            document.getElementById('newClient-name').disabled = true;
+            document.getElementById('newClient-phoneNumber').disabled = true;
+            document.getElementById('newClient-comment').disabled = true;
+            if (lastIdClient) {
+                document.getElementById(lastIdClient).style.display = 'none';
+            }
+            lastIdClient = idClient;
+            document.getElementById(idClient).style.display = 'flex';
+        }
+    }
+</script>

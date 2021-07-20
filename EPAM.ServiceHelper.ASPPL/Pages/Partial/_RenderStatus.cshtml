@@ -1,0 +1,72 @@
+﻿@using EPAM.ServiceHelper.Entities
+@{
+    try
+    {
+        Order order = PageData[0];
+        Status status = order.Status;
+
+
+     
+
+
+    <div class="dropdown">
+        @switch (status)
+        {
+            case Status.notProcessed:
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Новый
+                </button>
+                break;
+            case Status.inWork:
+                <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    В работе
+                </button>
+                break;
+            case Status.waiting:
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Ждёт запчасть
+                </button>
+                break;
+            case Status.forApproval:
+                <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    На согласовании
+                </button>
+                break;
+            case Status.ready:
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Готов
+                </button>
+                break;
+            case Status.closed:
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Закрыт
+                </button>
+                break;
+
+
+        }
+       
+        <div class="dropdown-menu">
+            <a class="dropdown-item" href="~/Pages/OrderChangeStatus.cshtml?id=@order.Id&status=@Status.notProcessed">Новый</a>
+            <a class="dropdown-item" href="~/Pages/OrderChangeStatus.cshtml?id=@order.Id&status=@Status.inWork">В работе</a>
+            <a class="dropdown-item" href="~/Pages/OrderChangeStatus.cshtml?id=@order.Id&status=@Status.waiting">Ждёт запчасть</a>
+            <a class="dropdown-item" href="~/Pages/OrderChangeStatus.cshtml?id=@order.Id&status=@Status.forApproval">На согласовании</a>
+            <a class="dropdown-item" href="~/Pages/OrderChangeStatus.cshtml?id=@order.Id&status=@Status.ready">Готов</a>            
+            <a class="dropdown-item" href="~/Pages/OrderChangeStatus.cshtml?id=@order.Id&status=@Status.closed">Закрыт</a>
+        </div>
+    </div>
+
+
+    }
+
+    catch
+    {
+
+        <p> Ошибка при определнии статуса </p>
+
+
+    }
+}
+
+
+

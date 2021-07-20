@@ -1,0 +1,32 @@
+﻿@using EPAM.ServiceHelper.Entities
+@using NLog
+@{
+    if (IsPost)
+    {
+        var logger = LogManager.GetCurrentClassLogger();
+        try
+        {
+
+            int idOrder = Convert.ToInt32(Request["idOrder"]);
+            int idEmployee = Convert.ToInt32(Request["idEmployee"]);
+            var logic = DependencyResolver.Instance.Logic;
+            logic.AddProduct(idOrder, idEmployee,
+                price: Convert.ToInt32(Request["price"]),
+                name: Request["name"],
+                comment: Request["comment"],
+                dateCreation: DateTime.Now,
+                term: TimeSpan.FromDays(double.Parse( Request["day"]))
+                );
+            Response.Redirect("~/Pages/Order.cshtml?id=" + idOrder.ToString(),false);
+        }
+        catch (Exception e)
+        {
+            logger.Warn(e);
+            Response.Redirect("~/Pages/ErrorPage.cshtml");
+        }
+
+    }
+
+}
+
+

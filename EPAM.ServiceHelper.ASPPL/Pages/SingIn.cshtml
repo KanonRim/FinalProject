@@ -1,0 +1,76 @@
+﻿@using EPAM.ServiceHelper.Entities
+@using NLog
+@{
+    Layout = Layout = "~/Pages/Layaout/_LayoutBase.cshtml";
+
+
+
+    var logger = LogManager.GetCurrentClassLogger();
+
+    var logic = DependencyResolver.Instance.Logic;
+
+
+    int users = logic.GetEmployees().ToArray().Length;
+
+    if (users == 0)
+    {
+        Response.Redirect("~/Pages/Registration.cshtml");
+    }
+    try
+    {
+        if (IsPost)
+        {
+
+            string name = Request["name"];
+            string pass = Request["password"];
+            if (ServiceAuthentication.Instance.CanLogin(name.Trim(), pass))
+            {
+                FormsAuthentication.SetAuthCookie(name.Trim(), createPersistentCookie: true);
+                Response.Redirect("~/Index.cshtml");
+            }
+            else
+            {
+                <h4>Не удалось войти, попробуйте снова</h4>
+
+            }
+
+        }
+    }
+    catch (Exception e)
+    {
+
+        logger.Warn(e);
+        throw e;
+    }
+
+
+}
+
+@section title {
+    Логин
+}
+
+
+
+<div class="mainContainer" style=" align-items: center; justify-content: center; height:100vh">
+
+    <div class="text-center  col-6">
+        <h3 class="">Вход</h3>
+        <hr>
+        <form action="~/Pages/SingIn.cshtml" method="post">
+            <div class="form-group ">
+                <input name="name" type="text" class="form-control" placeholder="Введи имя">
+            </div>
+
+            <div class="form-group">
+                <input name="password" type="password" class="form-control" placeholder="Введи пароль">
+            </div>
+            </br>
+            <button type="submit" class="btn col-4  btn-primary">Войти</button>
+        </form>
+
+
+    </div>
+</div>
+
+

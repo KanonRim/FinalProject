@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/Scripts/jquery-3.6.0.js"></script>
+    <link type="text/css" href="~/css/style.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap.bundle.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.dropdown-toggle').dropdown();
+        });
+    </script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" crossorigin="anonymous">
+
+    <title>@RenderSection("title",false)</title>
+
+</head>
+<body>
+
+    <script language="JavaScript" type="text/javascript" src="~/Scripts/jquery-3.6.0.js"></script>    
+    @RenderBody()
+
+
+
+</body>
+
+</html>

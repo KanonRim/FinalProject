@@ -1,0 +1,11 @@
+﻿<fieldset>
+    <legend>
+     Новый Клиент
+    </legend>
+    <label>Имя клиента</label>
+    <input id="newClient-name" class="form-control" type="text" name="name" minlength="6" maxlength="50" placeholder="Ф.И.О" required>
+    <label>Номер телефона</label>
+    <input id="newClient-phoneNumber" class="form-control"  type="text" name="phonNumber" minlength="6" maxlength="12" placeholder="+7 927 222 22 22" required pattern="^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$" required>
+    <label>Комментарий</label>
+    <input id="newClient-comment" class="form-control"  type="text" name="comment" minlength="0" maxlength="50" required>
+</fieldset>

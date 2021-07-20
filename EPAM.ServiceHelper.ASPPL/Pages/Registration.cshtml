@@ -1,0 +1,85 @@
+﻿@using EPAM.ServiceHelper.Entities
+@using NLog
+@{
+
+    Layout = "~/Pages/Layaout/_LayoutBase.cshtml";
+    var logic = DependencyResolver.Instance.Logic;
+    var logger = LogManager.GetCurrentClassLogger();
+    try
+    {
+        int users = logic.GetEmployees().ToArray().Length;
+        if (users != 0)
+        {
+            Response.Redirect("~");
+        }
+
+        if (IsPost)
+        {
+
+            var employee =  logic.AddEmployee(
+        name: Request["name"],
+        phoneNumber: Request["phonNumber"],
+        comment: Request["comment"],
+        perm: (Permissions)Enum.Parse(typeof(Permissions), Request["perm"]),
+        passHash: ServiceAuthentication.Instance.HashPassword(Request["password"])
+        );
+            Response.Redirect("~/Index.cshtml",false);
+            logger.Info($"Регистрация владельца{employee.Name}");
+        }
+
+    }
+    catch (Exception e)
+    {
+
+        logger.Warn(e);
+        throw e;
+    }
+
+
+}
+
+@section title {
+    Первый запуск
+}
+<div class="mainContainer" style=" align-items: center; justify-content: center; height:100vh">
+
+    <form class="col-6" id="regForm" action="~/Pages/Registration.cshtml" method="post">
+        <fieldset class="">
+            <h3>Регистрация </h3>
+            <hr>
+            <div class="">
+
+                <label for="login">Имя пользователя</label>
+                <input class="form-control" name="name" type="text" id="login required ">
+
+                <label class="form-label" name="phonNumber" for="phonNumber">Номер телефона</label>
+                <input id="phonNumber" class="form-control" type="text" name="phonNumber"
+                       minlength="6" maxlength="12"
+                       placeholder="+7 927 222 22 22"
+                       required pattern="^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$">
+            </div>
+            <div class="">
+                <label for="password">Пароль</label>
+
+                <input class="form-control" name="password" id="password" type="password" minlength="6" maxlength="50"
+                       placeholder="password" required>
+                <label for="password-again">Ещё раз</label>
+                <input class="form-control" id="password-again" type="password" minlength="6" maxlength="50"
+                       placeholder="password" required>
+            </div>
+            <input name="comment" type="hidden" value="Owner" />
+            <input name="perm" type="hidden" value=@Permissions.admin />
+            <div class="block-registration">
+                </br>
+                <input class="btn col-6  btn-primary" type="submit" id="input" value="Отправить">
+            </div>
+        </fieldset>
+
+    </form>
+</div>
+<script src="~/js/passCheck.js"></script>
+<script>
+
+
+
+</script>

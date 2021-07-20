@@ -1,0 +1,13 @@
+﻿@using EPAM.ServiceHelper.Entities
+@{
+    Layout = Layout = "~/Pages/Layaout/_LayoutBase.cshtml";
+
+    FormsAuthentication.SignOut();
+    Response.Redirect("~/Index.cshtml");
+
+}
+
+@section title {
+    Логин
+}
+

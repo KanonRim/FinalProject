@@ -1,0 +1,57 @@
+﻿@using EPAM.ServiceHelper.Entities
+@{
+
+    var logic = DependencyResolver.Instance.Logic;
+}
+
+<div class="headerContainer">
+    <div class="headerTitleContainer">
+        <text class="headerTitle">
+            Привет @User.Identity.Name
+            <a href="~/Pages/Logout.cshtml">Выйти</a>
+        </text> 
+    </div>
+
+</div>
+
+<div>        
+        <a class=" btn btn-primary btn-lg " href="~/Pages/CreateOrder.cshtml">Заказ +</a>  
+</div>
+<table class="table  table-hover "   >
+    <tr  class="table-primary  ">
+        <td class="tableHeader">Заказ №</td>
+        <td class="tableHeader">Статус</td>
+        <td class="tableHeader">Крайний срок через</td>
+        <td class="tableHeader">Принято</td>
+        <td class="tableHeader">Устройств</td>
+        <td class="tableHeader">Клиент</td>
+        <td class="tableHeader">Цена</td>
+    </tr>
+    @foreach (var item in logic.GetOrders())
+    {
+        <tr>
+
+            @{
+                var href = "/Pages/Order.cshtml?id=" + item.Id;
+                var price = logic.PriceOrder(item.Id);
+                var timeWork = item.DateCreation + logic.GetWorkingHours(item.Id) - DateTime.Now;
+                string color = "while";
+                if (timeWork < TimeSpan.Zero)
+                {
+                    color = "darkgoldenrod";
+                }
+            }
+            <td style="color: deepskyblue"> <a href=@href>@item.Id </a></td>
+            <td > @RenderPage("~/Pages/Partial/_RenderStatus.cshtml", item) </td>
+            <td  style="background: @color">@timeWork.Days дней </td>
+            <td>@item.DateCreation</td>
+            <td>@item.Device</td>
+            <td>@item.Client.Name</td>
+            <td>@price руб</td>
+        </tr>
+    }
+
+
+</table>
+
+<text>Всего заказов @logic.GetOrders().Count()</text>
