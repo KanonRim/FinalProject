@@ -1,0 +1,70 @@
+﻿@using EPAM.ServiceHelper.Entities
+@using NLog
+@{
+    Layout = Layout = "~/Pages/Layaout/_LayoutLeftMenu.cshtml";
+
+
+    var logger = LogManager.GetCurrentClassLogger();
+
+    if (!User.IsInRole("admin"))
+    {
+        Response.Redirect("~");
+    }
+    IEnumerable<Person> clients;
+    try
+    {
+        var logic = DependencyResolver.Instance.Logic;
+        clients =  logic.GetClients();
+    }
+    catch (Exception e)
+    {
+
+        logger.Warn(e);
+        throw e;
+
+    }
+
+    if (clients.Count()==0)
+    {
+        <h3>Клиентов пока нет</h3>
+    }
+
+}
+
+@section title {
+    Клиенты
+}
+
+
+
+<table class="table table-hover">
+    <tr class="table-primary">
+        <td>
+            Имя
+        </td>
+        <td>
+            Номер телефона 
+        </td>
+        <td>
+            Комментарий
+        </td>
+    </tr>
+    <tr>
+        @foreach (var item in clients)
+        {
+            <td>
+                @item.Name
+            </td>
+            <td>
+                @item.PhonNuber
+            </td>
+            <td>
+                @item.Comment
+            </td>
+        }
+    </tr>
+
+</table>
+
+
+

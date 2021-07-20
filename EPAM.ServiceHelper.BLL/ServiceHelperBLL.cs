@@ -1,22 +1,23 @@
 ﻿using EPAM.ServiceHelper.Entities;
 using EPAM.ServiceHelper.InterfaceBLL;
 using EPAM.ServiceHelper.InterfaceDAO;
+using NLog;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EPAM.ServiceHelper.BLL
 {
     public class ServiceHelperBLL : IBLL
     {
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private static IDAO _DAO;
         public ServiceHelperBLL(IDAO dAO)
         {
-            _DAO = dAO;
+            logger.Info("Int BLL");
+           _DAO = dAO;
         }
 
+        
         #region Client
         public Person AddClient(string name, string phonNumber, string comment)
         {
@@ -125,7 +126,10 @@ namespace EPAM.ServiceHelper.BLL
         {
             return _DAO.GetOrders();
         }
-
+        public Order UpdateOrder(Order order)
+        {
+            return _DAO.UpdateOrder(order);
+        }
 
         #endregion
 

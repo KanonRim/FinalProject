@@ -25,14 +25,17 @@ namespace EPAM.ServiceHelper.Entities
         public DateTime DateCreation { get; }
         public string Device { get; set; }
         public string Equipment { get; set; }
+        public string Comment { get; set; }
 
-        public Order(int id, Status status, Person client, DateTime dateCreation, string device)
+        public Order(int id, Status status, Person client, DateTime dateCreation, string device,string equipment, string comment)
         {
             Id = id;
             Status = status;
             Client = client;
             DateCreation = dateCreation;
             Device = device;
+            Comment = comment;
+            Equipment = equipment;
         }
 
       

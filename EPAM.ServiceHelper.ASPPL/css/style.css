@@ -1,7 +1,3 @@
-body {
-    font-size: x-large;
-    margin:0;
-}
 
 button {
     color: white;
@@ -96,13 +92,7 @@ td {
     border-radius: 0;
 }
 
-.orderBtn {
-    padding: 8px;
-    background-color: #43a047;
-    color: aliceblue;
-    text-decoration: none;
-    border-radius: 10px;
-}
+
 
 .filterBtn {
     color: black;
@@ -111,10 +101,7 @@ td {
     border-width: 1px;
 }
 
-.tableHeader {
-    background-color: #607d8b;
-    color: aliceblue;
-}
+
 
 .status {
     border-radius: 10px;
@@ -123,34 +110,3 @@ td {
 
 
 
-
-.inputBorder:invalid {
-    border: 2px solid red;
-}
-
-.inputBorder:valid {
-    border: 2px solid black;
-}
-
-.registration {
-    background-color: cornflowerblue;
-    color: cornsilk;
-    width: 95%;
-}
-
-.button-registration {
-    background-color: gold;
-    padding: 2%;  
-}
-
-.block-registration {
-    text-align: center;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    padding-bottom: 2%;
-    width: 80%;
-}
-.block-registration > * {
-        width: 100%;
-}

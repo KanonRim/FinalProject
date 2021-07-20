@@ -1,79 +1,85 @@
 ﻿@using EPAM.ServiceHelper.Entities
+@using NLog
 @{
-    var logic = DependencyResolver.Instance.Logic;
+
     Layout = "~/Pages/Layaout/_LayoutBase.cshtml";
-
-
-    int users = logic.GetEmployees().ToArray().Length;
-
-    if (users != 0)
+    var logic = DependencyResolver.Instance.Logic;
+    var logger = LogManager.GetCurrentClassLogger();
+    try
     {
-        Response.Redirect("~");
+        int users = logic.GetEmployees().ToArray().Length;
+        if (users != 0)
+        {
+            Response.Redirect("~");
+        }
+
+        if (IsPost)
+        {
+
+            var employee =  logic.AddEmployee(
+        name: Request["name"],
+        phoneNumber: Request["phonNumber"],
+        comment: Request["comment"],
+        perm: (Permissions)Enum.Parse(typeof(Permissions), Request["perm"]),
+        passHash: ServiceAuthentication.Instance.HashPassword(Request["password"])
+        );
+            Response.Redirect("~/Index.cshtml",false);
+            logger.Info($"Регистрация владельца{employee.Name}");
+        }
+
+    }
+    catch (Exception e)
+    {
+
+        logger.Warn(e);
+        throw e;
     }
 
-    if (IsPost)
-    {
 
-        logic.AddEmployee(
-            name: Request["name"],
-            phoneNumber: Request["phonNumber"],
-            comment: Request["comment"],
-            perm: (Permissions)Enum.Parse(typeof(Permissions), Request["perm"]),
-            passHash: ServiceAuthentication.Instance.HashPassword(Request["password"])
-            );
-        Response.Redirect("~/Index.cshtml");
-    }
 }
 
-<form id="regForm" action="~/Pages/Registration.cshtml" method="post">
-    <fieldset class="registration">
-        <h1>Регистрация </h1>
-        <hr>
-        <div class="block-registration">
-            <label  for="login">Имя пользователя</label>
-            <input name="name" type="text" id="login required ">
-            <label name="phonNumber" for="phonNumber">Номер телефона</label>
+@section title {
+    Первый запуск
+}
+<div class="mainContainer" style=" align-items: center; justify-content: center; height:100vh">
 
-            <input id="phonNumber" class="inputBorder" type="text" name="phonNumber"
-                   minlength="6" maxlength="12"
-                   placeholder="+7 927 222 22 22"
-                   required pattern="^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$">
-        </div>
-        <div class="block-registration">
-            <label for="password">Пароль</label> <br>
-            <input name="password" id="password" type="password" minlength="6" maxlength="50"
-                   placeholder="password" required>
-            <label for="password-again">Ещё раз</label><br>
-            <input id="password-again" type="password" minlength="6" maxlength="50"
-                   placeholder="password" required>
-        </div> <br>
-        <input name="comment" type="hidden" value="Owner" />
-        <input name="perm" type="hidden" value=@Permissions.admin />
-        <div class="block-registration">
-            <input class="button-registration" type="submit" id="input" value="Отправить">
-        </div>
-    </fieldset>
+    <form class="col-6" id="regForm" action="~/Pages/Registration.cshtml" method="post">
+        <fieldset class="">
+            <h3>Регистрация </h3>
+            <hr>
+            <div class="">
 
-</form>
+                <label for="login">Имя пользователя</label>
+                <input class="form-control" name="name" type="text" id="login required ">
 
+                <label class="form-label" name="phonNumber" for="phonNumber">Номер телефона</label>
+                <input id="phonNumber" class="form-control" type="text" name="phonNumber"
+                       minlength="6" maxlength="12"
+                       placeholder="+7 927 222 22 22"
+                       required pattern="^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$">
+            </div>
+            <div class="">
+                <label for="password">Пароль</label>
+
+                <input class="form-control" name="password" id="password" type="password" minlength="6" maxlength="50"
+                       placeholder="password" required>
+                <label for="password-again">Ещё раз</label>
+                <input class="form-control" id="password-again" type="password" minlength="6" maxlength="50"
+                       placeholder="password" required>
+            </div>
+            <input name="comment" type="hidden" value="Owner" />
+            <input name="perm" type="hidden" value=@Permissions.admin />
+            <div class="block-registration">
+                </br>
+                <input class="btn col-6  btn-primary" type="submit" id="input" value="Отправить">
+            </div>
+        </fieldset>
+
+    </form>
+</div>
+<script src="~/js/passCheck.js"></script>
 <script>
 
-        form = document.getElementById("regForm");
 
-        form.onsubmit = function () {
-            let pas = document.getElementById('password');
-            let pasAgain = document.getElementById('password-again');
-            if (pas.value != pasAgain.value) {
-                pasAgain.setCustomValidity("Пароли не совпадают");
-                console.log(pas.value + "Passwords don't match" + pasAgain.value);
-                return false; // prevent the form from submitting
-            } else {
-                pasAgain.setCustomValidity('');
-            }
-        }
 
-        document.getElementById("password-again").onchange = function (e) {
-            e.target.setCustomValidity('')
-        }
-
-    </script>
+</script>

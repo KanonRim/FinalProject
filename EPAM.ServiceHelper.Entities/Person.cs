@@ -24,10 +24,5 @@ namespace EPAM.ServiceHelper.Entities
 
     }
 
-    public class Client : Person
-    {
-        public Client(int id, string name, string phonNumber, string comment) : base(id, name, phonNumber, comment)
-        {
-        }
-    }
+
 }

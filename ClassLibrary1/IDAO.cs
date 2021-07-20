@@ -6,6 +6,7 @@ namespace EPAM.ServiceHelper.InterfaceDAO
 {
     public interface IDAO
     {
+
         Person AddClient(string name, string phonNumber, string comment);
         void AddOrder(Status status, Person client, DateTime dateCreation, string equipment, string comment, string device);
         Product AddProduct(int idOrder, int idEmployee, int price, string name, string comment, DateTime dateCreation, TimeSpan term);
@@ -21,9 +22,14 @@ namespace EPAM.ServiceHelper.InterfaceDAO
        
         IEnumerable<Employee> GetEmployees();
         Order GetOrder(int id);
+
+       
+
         IEnumerable<Order> GetOrders();
         IEnumerable<Order> GetOrders(int fromId, int count);
         IEnumerable<Product> GetProducts(int idOrder);
 
+        Order UpdateOrder(Order order);
+      
     }
 }

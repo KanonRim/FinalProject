@@ -1,0 +1,28 @@
+﻿@using EPAM.ServiceHelper.Entities
+@using EPAM.ServiceHelper.InterfaceBLL
+@{
+    Layout = "~/Pages/Layaout/_LayoutBase.cshtml";
+
+    if (!User.Identity.IsAuthenticated)
+    {
+        Response.Redirect("~/Pages/SingIn.cshtml");
+    }
+}
+
+@section title {
+    @RenderSection("title", false)
+}
+<div class="mainContainer">
+    <div class="hiddenMenu" id="hiddenMenu" style="display: flex;">
+        >
+    </div>
+    <div class="leftMenu hiddenMenu" id="menu">
+        @RenderPage("/Pages/Partial/_LeftMenu.cshtml")
+    </div>
+
+    <div class="contentContainer">
+        @RenderBody()
+    </div>
+
+</div>
+<script src="~/js/leftMenuHider.js"></script>

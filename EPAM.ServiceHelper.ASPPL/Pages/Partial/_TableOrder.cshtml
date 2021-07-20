@@ -6,24 +6,19 @@
 
 <div class="headerContainer">
     <div class="headerTitleContainer">
-        <text class="headerTitle">Привет @User.Identity.Name</text>
+        <text class="headerTitle">
+            Привет @User.Identity.Name
+            <a href="~/Pages/Logout.cshtml">Выйти</a>
+        </text> 
     </div>
-    <div>
-        <button class="headerBtn">Мои заказы</button>
-        <button class="headerBtn" style="background-color: red">Срочных</button>
-        <button class="headerBtn" style="background-color: darkgoldenrod">Просроченные</button>
-        <button class="headerBtn" style="background-color: black">Ждут оплаты</button>
-    </div>
+
 </div>
-<div class="searchContainer">
-    <input placeholder="Минимум 3 символа" />
-    <button class="searchBtn">Искать</button>
-</div>
+
 <div>        
-        <a class="orderBtn" href="~/Pages/CreateOrder.cshtml">Заказ +</a>  
+        <a class=" btn btn-primary btn-lg " href="~/Pages/CreateOrder.cshtml">Заказ +</a>  
 </div>
-<table>
-    <tr>
+<table class="table  table-hover "   >
+    <tr  class="table-primary  ">
         <td class="tableHeader">Заказ №</td>
         <td class="tableHeader">Статус</td>
         <td class="tableHeader">Крайний срок через</td>
@@ -47,7 +42,7 @@
                 }
             }
             <td style="color: deepskyblue"> <a href=@href>@item.Id </a></td>
-            <td> @RenderPage("~/Pages/Partial/_RenderStatus.cshtml", item) </td>
+            <td > @RenderPage("~/Pages/Partial/_RenderStatus.cshtml", item) </td>
             <td  style="background: @color">@timeWork.Days дней </td>
             <td>@item.DateCreation</td>
             <td>@item.Device</td>

@@ -1,67 +1,83 @@
 ﻿@using EPAM.ServiceHelper.Entities
+@using NLog
 @{
-    Layout = Layout = "~/Pages/Layaout/_LayoutBase.cshtml";
+    Layout = Layout = "~/Pages/Layaout/_LayoutLeftMenu.cshtml";
 
     if (!User.IsInRole("user"))
     {
         Response.Redirect("~");
     }
 
-    var Clents = DependencyResolver.Instance.Logic.GetClients();
+
+    var logger = LogManager.GetCurrentClassLogger();
+    var Clients = DependencyResolver.Instance.Logic.GetClients();
     var logic = DependencyResolver.Instance.Logic;
-    if (IsPost)
+
+    try
     {
-        if (Request["idClient"] == "New")
+
+        if (IsPost)
         {
-            var client = logic.AddClient(
-                     name: Request["Name"],
-                     phonNumber: Request["phonNumber"],
-                     comment: Request["comment"]);
+            if (Request["idClient"] == "New")
+            {
+                var client = logic.AddClient(
+                            name: Request["Name"],
+                            phonNumber: Request["phonNumber"],
+                            comment: Request["comment"]);
 
-            logic.AddOrder(
-            status: Status.notProcessed,
-            client: client,
-            dateCreation: DateTime.Now,
-            equipment: Request["equipment"],
-            comment: Request["comment"],
-            device: Request["device"]);
-
-        }
-        else
-        {
-
-            logic.AddOrder(
-            status: Status.notProcessed,
-            client: logic.GetClient(int.Parse(Request["idClient"])),
-            dateCreation: DateTime.Now,
-            equipment: Request["equipment"],
-            comment: Request["comment"],
-            device: Request["device"]);
+                logic.AddOrder(
+                status: Status.notProcessed,
+                client: client,
+                dateCreation: DateTime.Now,
+                equipment: Request["equipment"],
+                comment: Request["comment-device"],
+                device: Request["device"]);
+            }
+            else
+            {
+                logic.AddOrder(
+                status: Status.notProcessed,
+                client: logic.GetClient(int.Parse(Request["idClient"])),
+                dateCreation: DateTime.Now,
+                equipment: Request["equipment"],
+                comment: Request["comment-device"],
+                device: Request["device"]);
+            }
         }
     }
+    catch (Exception e)
+    {
+        logger.Warn(e);
+        Response.Redirect("~/Pages/ErrorPage.cshtml");
+    }
+
+
 }
 
-<h1>Новый заказ</h1>
+@section title {
+    Новый заказ
+}
+<h3>Новый заказ</h3>
 
 <form class="" action="~/Pages/CreateOrder.cshtml" method="post">
 
-    Клиент: <select name="idClient" id="clientContainer" value="New">
-        <option value="New">Новый клиент</option>
-        @foreach (var item in Clents)
-        {
-            <option value=@item.Id selected> @item.Name</option>
-        }
+    <label>Клиент: </label> <select class="form-control" name="idClient" id="clientContainer">
 
+        @foreach (var item in Clients)
+            {
+        <option value=@item.Id selected> @item.Name</option>
+            }
+        <option selected value="New">Новый клиент</option>
     </select>
 
-    @foreach (var item in Clents)
-    {
-        <fieldset id=@item.Id style="display: none">
-            @RenderPage("~/Pages/Partial/_RenderClient.cshtml", item.Id)
-        </fieldset>
-    }
+    @foreach (var item in Clients)
+        {
+    <fieldset id=@item.Id style="display: none">
+        @RenderPage("~/Pages/Partial/_RenderClient.cshtml", item.Id)
+    </fieldset>
+}
 
-    <div id="newClient">
+    <div id="newClient" disabled>
         @RenderPage("~/Pages/Partial/_FeldsetClient.cshtml")
     </div>
 
@@ -71,43 +87,47 @@
         </legend>
         <p>
             <label>Наименование</label>
-            <input type="text" name="device" minlength="3" maxlength="50">
+            <input class="form-control" type="text" name="device" minlength="3" maxlength="50" required>
         </p>
         <p>
             <label>Комплектация</label>
-            <input type="text" name="equipment" minlength="0" maxlength="50">
+            <input class="form-control" type="text" name="equipment" minlength="0" maxlength="50">
         </p>
         <p>
             <label>Комментарий</label>
-            <input type="text" name="comment" minlength="0" maxlength="50">
+            <input class="form-control" type="text" name="comment-device" minlength="0" maxlength="50" required>
         </p>
 
     </fieldset>
-    <input type="submit" />
+    <input class="btn col-4  btn-primary" type="submit" />
 </form>
 
 <script>
 
-        let lastIdClient = null;
-        let newClient = document.getElementById('newClient');
-        document.getElementById('clientContainer').onchange = function () {
-            
-            let idClient = document.getElementById('clientContainer').value;
-            if (idClient == "New") {
-                newClient.style.display = 'flex';
-                newClient.disabled = false;
-                if (lastIdClient) {
-                    document.getElementById(lastIdClient).style.display = 'none';
-                }
-            }
-            else {
-                newClient.style.display = 'none';
-                newClient.disabled = true;
-                if (lastIdClient) {
-                    document.getElementById(lastIdClient).style.display = 'none';
-                }
-                lastIdClient = idClient;
-                document.getElementById(idClient).style.display = 'flex';
+    let lastIdClient = null;
+    let newClient = document.getElementById('newClient');
+    document.getElementById('clientContainer').onchange = function () {
+
+        let idClient = document.getElementById('clientContainer').value;
+        if (idClient == "New") {
+            newClient.style.display = 'flex';
+            document.getElementById('newClient-name').disabled = false;
+            document.getElementById('newClient-phoneNumber').disabled = false;
+            document.getElementById('newClient-comment').disabled = false;
+            if (lastIdClient) {
+                document.getElementById(lastIdClient).style.display = 'none';
             }
         }
+        else {
+            newClient.style.display = 'none';
+            document.getElementById('newClient-name').disabled = true;
+            document.getElementById('newClient-phoneNumber').disabled = true;
+            document.getElementById('newClient-comment').disabled = true;
+            if (lastIdClient) {
+                document.getElementById(lastIdClient).style.display = 'none';
+            }
+            lastIdClient = idClient;
+            document.getElementById(idClient).style.display = 'flex';
+        }
+    }
 </script>

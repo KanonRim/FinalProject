@@ -1,85 +1,97 @@
 ﻿@using EPAM.ServiceHelper.Entities
-@using EPAM.ServiceHelper.InterfaceBLL
+@using NLog
 @{
-    Layout = "~/Pages/Layaout/_LayoutBase.cshtml";
+    Layout = "~/Pages/Layaout/_LayoutLeftMenu.cshtml";
+
+    var logger = LogManager.GetCurrentClassLogger();
 
     if (!User.IsInRole("user"))
     {
         Response.Redirect("~");
     }
-
-    int id = Convert.ToInt32(Request.QueryString["id"]);
     var logic = DependencyResolver.Instance.Logic;
+    int id = Convert.ToInt32(Request.QueryString["id"]);
+
     Order order = logic.GetOrder(id);
+
+
 
     if (order == null)
     {
+        logger.Warn("Запрос не существующего заказа");
         throw new Exception("Не найден заказ");
     }
 
-    <div class="block-registration">
-        <p>Клиент</p>
+
+}
+    @section title {
+        Заказ @order.Id
+    }
+<div class="form-control">
+    <fieldset class="form-group">
+        <h3>Клиент</h3>
+
         @RenderPage("~/Pages/Partial/_RenderClient.cshtml", order.Client.Id)
+    </fieldset>
+    <fieldset>
+        <h3>Номер заказа: @order.Id</h3>
 
-        <p>Номер заказа: @order.Id</p>
-        <p>Создан: @order.DateCreation </p>
-        <p>Устройство @order.Device</p>
-        <p>Комплектация @order.Equipment</p>
+        <label>Создан</label>
+        <p class="form-control"> @order.DateCreation </p>
+        <label>Устройство</label>
+        <p class="form-control"> @order.Device</p>
+        <label>Комплектация</label>
+        <p class="form-control"> @order.Equipment</p>
         <p> @RenderPage("~/Pages/Partial/_RenderStatus.cshtml", order)</p>
-        <p>
-            Работа и материалы
-            Добавить
-        </p>
-        <form action="~/Pages/CreateWorkForm.cshtml" method="post" target="_blank">
-            <input type="hidden" name="idOrder" value=@order.Id />
-            <input type="hidden" name="idEmployee" value=@logic.GetEmployeeByName(User.Identity.Name).Id />
-            <div>
-                <label>Название работы или продукта</label>
-                <input name="name" type="text" maxlength="50" />
-            </div>
-            <div>
-                <label>Цена</label>
-                <input name="price" type="number" min="0" />
-            </div>
-            <div>
-                <label>Комментарий</label>
-                <input name="comment" type="text" maxlength="50" />
-            </div>
-            <div>
-                <label>Конечная дата</label>
+    </fieldset>
 
+    <form action="~/Pages/CreateWorkForm.cshtml" method="post">
+        <h3>
+            Добавить работу или материал
 
+        </h3>
+        <input class="" type="hidden" name="idOrder" value=@order.Id />
+        <input type="hidden" name="idEmployee" value=@logic.GetEmployeeByName(User.Identity.Name).Id />
+        <div>
+            <label>Название работы или продукта</label>
+            <input class="form-control" name="name" type="text" minlength="3" maxlength="50" required />
+        </div>
+        <div>
+            <label>Цена</label>
+            <input class="form-control" name="price" type="number" min="0" step="any"  required />
+        </div>
+        <div>
+            <label>Комментарий</label>
+            <input class="form-control" name="comment" type="text" maxlength="50" required  />
+        </div>
+        <div>
+            <label>Необходимо дней</label>
 
-                <input name="date" type="date" value=@DateTime.Now.AddDays(7) min=@DateTime.Now.ToString("s")>
-            </div>
-            <input type="submit" value=" добавить работу" />
-        </form>
-    </div>
-    <script>
+            <input class="form-control" name="day" type="number" value="3" min="0" required >
+        </div>
+        <br/>
+        <input class="btn col-6  btn-primary" type="submit" value=" добавить работу" />
+    </form>
+</div>
 
-        let lastIdClient = null;
-        let newClient = document.getElementById('newClient');
-        document.getElementById('clientContainer').onchange = function () {
-            alet();
-            let idClient = document.getElementById('clientContainer').value;
-            if (idClient == "New") {
-                newClient.style.display = 'flex';
-                newClient.disabled = false;
-                if (lastIdClient) {
-                    document.getElementById(lastIdClient).style.display = 'none';
-                }
-            }
-            else {
-                newClient.style.display = 'none';
-                newClient.disabled = true;
-                if (lastIdClient) {
-                    document.getElementById(lastIdClient).style.display = 'none';
-                }
-                lastIdClient = idClient;
-                document.getElementById(idClient).style.display = 'flex';
-            }
+<h3>Произведённые работы</h3>
+<ul>
+    @foreach (var item in logic.GetProducts(order.Id))
+    {
+        var employee = logic.GetEmployee(item.IdEmployee);
+        if (employee == null)
+        {
+            <li>@item.Name Цена: @item.Price Исполнитель не найден</li>
         }
-    </script>
+        else
+        {
+            <li>@item.Name Цена: @item.Price Добавил @employee.Name</li>
+        }
+
+    }
+
+</ul>
+
 }
 
 

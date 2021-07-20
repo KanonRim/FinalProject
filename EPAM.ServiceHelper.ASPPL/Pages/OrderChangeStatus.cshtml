@@ -1,0 +1,33 @@
+﻿@using EPAM.ServiceHelper.Entities
+@using NLog
+@{
+
+    if (!User.IsInRole("user"))
+    {
+        Response.Redirect("~");
+    }
+
+    var logger = LogManager.GetCurrentClassLogger();
+
+    try
+    {
+        int id = Convert.ToInt32(Request.QueryString["id"]);
+        Status status = (Status)Enum.Parse(typeof(Status), (string)Request.QueryString["status"], true);
+
+        var logic = DependencyResolver.Instance.Logic;
+        var order = logic.GetOrder(id);
+        order.Status = (Status)status;
+        logic.UpdateOrder(order);
+
+        Response.Redirect("~",false);
+    }
+    catch (Exception e)
+    {
+
+        logger.Warn(e);
+        throw e;
+    }
+
+
+}
+

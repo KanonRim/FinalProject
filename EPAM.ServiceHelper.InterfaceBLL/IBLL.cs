@@ -12,19 +12,18 @@ namespace EPAM.ServiceHelper.InterfaceBLL
 
         Person AddClient(string name, string phonNumber, string comment);
 
-        //todo add Return_values    
-   
+        //todo add Return_values       
         void AddOrder(Status status, Person client, DateTime dateCreation, string equipment, string comment, string device);
 
         Product AddProduct(int idOrder, int idEmployee, int price, string name, string comment, DateTime dateCreation, TimeSpan term);
 
-        int PriceOrder(int idOrder);
+       
 
         IEnumerable<Product> GetProducts(int idOrder);
 
         TimeSpan GetWorkingHours(int idOrder);
 
-        Order GetOrder(int id);
+
 
         Person GetClient(int id);
 
@@ -35,6 +34,9 @@ namespace EPAM.ServiceHelper.InterfaceBLL
         Employee AddEmployee(string name, string phoneNumber, string comment,Permissions perm, string passHash);
         string GetPassHash(int IdEmployee);
 
+        int PriceOrder(int idOrder);
+
+        Order GetOrder(int id);
         IEnumerable<Order> GetOrders();
 
         IEnumerable<Order> GetOrders(Status[] status);
@@ -44,8 +46,8 @@ namespace EPAM.ServiceHelper.InterfaceBLL
         IEnumerable<Order> GetOrders(int from ,int count);
 
         IEnumerable<Order> GetOrders(DateTime fromDate, DateTime toDate);
-        
 
+        Order UpdateOrder(Order order);
         IEnumerable<Person> GetClients();
 
 

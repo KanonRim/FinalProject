@@ -4,11 +4,15 @@ using System.Collections.Generic;
 using EPAM.ServiceHelper.Entities;
 using EPAM.ServiceHelper.InterfaceDAO;
 using System;
+using NLog;
 
 namespace EPAM.ServiceHelper.DAO
 {
+
+ 
     public class DAOSQL : IDAO
     {
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private static string _connectionString = ConfigurationManager.ConnectionStrings["default"].ConnectionString;
 
         public Person AddClient(string name, string phonNumber, string comment)
@@ -55,6 +59,17 @@ namespace EPAM.ServiceHelper.DAO
             }
         }
 
+        public Order UpdateOrder(Order order)
+        {
+            using (SqlConnection _connection = new SqlConnection(_connectionString))
+            {
+                string[] nameParam = new string[] { "id","idClient", "status", "dateCreation", "device", "equipment", "comment" };
+                string[] param = new string[] { order.Id.ToString(), order.Client.Id.ToString(), ((int)order.Status).ToString(), order.DateCreation.ToString(), order.Device, order.Equipment, order.Comment };
+                var cmd = ProcedureCMD("UpdateOrder", nameParam, param, _connection);
+                return GetOrder(Convert.ToInt32(cmd.ExecuteScalar()));
+
+            }
+        }
 
         public void AddOrder(Status status, Person client, DateTime dateCreation, string equipment,string comment, string device)
         {
@@ -206,7 +221,10 @@ namespace EPAM.ServiceHelper.DAO
                     status:(Status)reader["status"],
                     client: GetClient((int)reader["idClient"]),
                     dateCreation:(DateTime)reader["dateCreation"],
-                    device:(string)reader["device"]);
+                    device:(string)reader["device"],
+                    equipment: (string)reader["equipment"],
+                    comment: (string)reader["comment"]);
+                    
                 }
                 else
                 {
@@ -227,7 +245,9 @@ namespace EPAM.ServiceHelper.DAO
                     status: (Status)reader["status"],
                     client: GetClient((int)reader["idClient"]),
                     dateCreation: (DateTime)reader["dateCreation"],
-                    device: (string)reader["device"]); ;
+                    device: (string)reader["device"],
+                    equipment: (string)reader["equipment"],
+                    comment: (string)reader["comment"]); ;
                 }
             }
         }
@@ -244,27 +264,18 @@ namespace EPAM.ServiceHelper.DAO
                     status: (Status)reader["status"],
                     client: GetClient((int)reader["idClient"]),
                     dateCreation: (DateTime)reader["dateCreation"],
-                    device: (string)reader["device"]); ;
+                    device: (string)reader["device"],
+                    equipment: (string)reader["equipment"],
+                    comment: (string)reader["comment"]); ;
                 }
             }
         }
 
 
 
-        public Product WorkInOrder(int idOrder)
-        {
-            throw new System.NotImplementedException();
-        }
+  
 
-        private SqlDataReader Get(string procedure, string[] nameParam, string[] param)
-        {
-            using (SqlConnection _connection = new SqlConnection(_connectionString))
-            {
-                SqlDataReader reader = ProcedureReader(procedure, nameParam, param, _connection);
 
-                return reader;
-            }
-        }
 
         private SqlDataReader ProcedureReader(string procedure, string[] nameParam, string[] param, SqlConnection _connection)
         {
@@ -274,19 +285,30 @@ namespace EPAM.ServiceHelper.DAO
 
         private SqlCommand ProcedureCMD(string procedure, string[] nameParam, string[] param, SqlConnection _connection)
         {
-            SqlCommand command = new SqlCommand(procedure, _connection)
+            try
             {
-                CommandType = System.Data.CommandType.StoredProcedure
-            };
+                SqlCommand command = new SqlCommand(procedure, _connection)
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                };
 
-            for (int i = 0; i < nameParam.Length; i++)
-            {
-                if (nameParam[i] != "")
-                    command.Parameters.AddWithValue(nameParam[i], param[i]);
+                for (int i = 0; i < nameParam.Length; i++)
+                {
+                    if (nameParam[i] != "")
+                        command.Parameters.AddWithValue(nameParam[i], param[i]);
+                }
+                _connection.Open();
+
+                return command;
             }
-            _connection.Open();
-            
-            return command;
+            catch (Exception e )
+            {
+                logger.Warn(e, $"Error prozedure {procedure}");
+                throw e;
+            }
+      
+         
+
         }
 
         private SqlDataReader ProcedureReader(string procedure, SqlConnection _connection)

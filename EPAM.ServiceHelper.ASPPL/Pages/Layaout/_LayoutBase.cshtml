@@ -3,22 +3,26 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
+    <script src="~/Scripts/jquery-3.6.0.js"></script>
     <link type="text/css" href="~/css/style.css" rel="stylesheet" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+    <script src="~/Scripts/bootstrap.bundle.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.dropdown-toggle').dropdown();
+        });
+    </script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" crossorigin="anonymous">
+
+    <title>@RenderSection("title",false)</title>
+
 </head>
 <body>
 
-    <script language="JavaScript" type="text/javascript" src="~/Scripts/jquery-3.6.0.js"></script>
-
-
+    <script language="JavaScript" type="text/javascript" src="~/Scripts/jquery-3.6.0.js"></script>    
     @RenderBody()
 
 
-
-
-    <script src="~/js/2.js"></script>
 
 </body>
 
