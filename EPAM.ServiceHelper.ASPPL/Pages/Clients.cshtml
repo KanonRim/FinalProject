@@ -43,28 +43,30 @@
             Имя
         </td>
         <td>
-            Номер телефона 
+            Номер телефона
         </td>
         <td>
             Комментарий
         </td>
     </tr>
-    <tr>
-        @foreach (var item in clients)
-        {
-            <td>
-                @item.Name
-            </td>
-            <td>
-                @item.PhonNuber
-            </td>
-            <td>
-                @item.Comment
-            </td>
-        }
-    </tr>
 
-</table>
+    @foreach (var item in clients)
+    {
+<tr>
+    <td>
+        @item.Name
+    </td>
+    <td>
+        @item.PhonNuber
+    </td>
+    <td>
+        @item.Comment
+    </td>
+</tr>
+            }
+        
+
+    </table>
 
 
 
