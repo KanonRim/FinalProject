@@ -31,7 +31,7 @@
                 dateCreation: DateTime.Now,
                 equipment: Request["equipment"],
                 comment: Request["comment-device"],
-                device: Request["device"]);
+                device: Request["device"]); // I'd redirect to a page to add work to this order
             }
             else
             {
@@ -95,7 +95,7 @@
         </p>
         <p>
             <label>Комментарий</label>
-            <input class="form-control" type="text" name="comment-device" minlength="0" maxlength="50" required>
+            <input class="form-control" type="text" name="comment-device" minlength="0" maxlength="50" required><!-- should the comment really be required here? -->
         </p>
 
     </fieldset>

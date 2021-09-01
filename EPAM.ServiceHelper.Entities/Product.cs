@@ -25,7 +25,7 @@ namespace EPAM.ServiceHelper.Entities
         public string Name { get; set; }
         public string Comment { get; set; }
         public DateTime DateCreation { get; }
-        public TimeSpan Term { get; set; }
+        public TimeSpan Term { get; set; } // TotalWorkTime would be clearer
     }
 
 }

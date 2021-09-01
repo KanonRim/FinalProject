@@ -8,7 +8,7 @@
     try
     {
         int users = logic.GetEmployees().ToArray().Length;
-        if (users != 0)
+        if (users != 0) // You thought about it)
         {
             Response.Redirect("~");
         }
@@ -24,7 +24,7 @@
         passHash: ServiceAuthentication.Instance.HashPassword(Request["password"])
         );
             Response.Redirect("~/Index.cshtml",false);
-            logger.Info($"Регистрация владельца{employee.Name}");
+            logger.Info($"Регистрация владельца{employee.Name}"); // Could name the page accordingly. Can confuse with regular sign up page
         }
 
     }

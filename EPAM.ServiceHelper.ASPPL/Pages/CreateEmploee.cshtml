@@ -6,7 +6,7 @@
 
     var logger = LogManager.GetCurrentClassLogger();
 
-    if (!User.IsInRole("admin"))
+    if (!User.IsInRole("admin")) // more correct would be to check 'addEmployee' permission - non-admin user could have it, but the page would still be closed
     {
         Response.Redirect("~");
     }
@@ -38,7 +38,7 @@
     {
 
         logger.Warn(e);
-        throw e;
+        throw;
     }
 
 
@@ -48,7 +48,7 @@
     Сотрудники
 }
 
-<form class="col-6" id="regForm" action="~/Pages/CreateEmploee.cshtml" method="post">
+<form class="col-6" id="regForm" action="~/Pages/CreateEmploee.cshtml" method="post"> <!-- if you remove action attribute form will be sent to current page too -->
 
     <h3>Добавить сотрудника </h3>
     <hr>

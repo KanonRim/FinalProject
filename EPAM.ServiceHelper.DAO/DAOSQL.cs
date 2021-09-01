@@ -17,13 +17,14 @@ namespace EPAM.ServiceHelper.DAO
 
         public Person AddClient(string name, string phonNumber, string comment)
         {
-            using (SqlConnection _connection = new SqlConnection(_connectionString))
+            using (SqlConnection _connection = new SqlConnection(_connectionString)) // underscores are for private fields, not variables
             {
                 
-                string[] nameParam = new string[] { "name", "phonNumber", "comment" };
+                string[] nameParam = new string[] { "name", "phonNumber", "comment" }; // You could use a Dictionary instead of 2 arrays. It returns KeyValuePairs for foreach
                 string[] param = new string[] { name, phonNumber, comment };
-                var cmd = ProcedureCMD("AddClient", nameParam, param, _connection);
-                return GetClient(Convert.ToInt32(cmd.ExecuteScalar()));
+                var cmd = ProcedureCMD("AddClient", nameParam, param, _connection); // Nice, removed code duplication
+                var value = cmd.ExecuteScalar();
+                return GetClient(Convert.ToInt32(value)); 
             }
         }
 
@@ -42,7 +43,7 @@ namespace EPAM.ServiceHelper.DAO
             };
         }
 
-        public string GetPassHash(int IdEmployee)
+        public string GetPassHash(int IdEmployee) // better check hashes without getting saved ones (in DB)
         {
             using (SqlConnection _connection = new SqlConnection(_connectionString))
             {
@@ -63,6 +64,17 @@ namespace EPAM.ServiceHelper.DAO
         {
             using (SqlConnection _connection = new SqlConnection(_connectionString))
             {
+                // var parameters = new Dictionary<string, object> // more intuitive and vertically is easier to read
+                // {
+                //     ["id"] = order.Id,
+                //     ["idClient"] = order.Client.Id,
+                //     ["status"] = (int)order.Status,
+                //     ["dateCreation"] = order.DateCreation,
+                //     ["device"] = order.Device,
+                //     ["equipment"] = order.Equipment,
+                //     ["comment"] = order.Comment,
+                // };
+
                 string[] nameParam = new string[] { "id","idClient", "status", "dateCreation", "device", "equipment", "comment" };
                 string[] param = new string[] { order.Id.ToString(), order.Client.Id.ToString(), ((int)order.Status).ToString(), order.DateCreation.ToString(), order.Device, order.Equipment, order.Comment };
                 var cmd = ProcedureCMD("UpdateOrder", nameParam, param, _connection);
@@ -89,11 +101,12 @@ namespace EPAM.ServiceHelper.DAO
                 string[] param = new string[] { idOrder.ToString(), idEmployee.ToString(), price.ToString(), name , comment , dateCreation.ToString(), term.Ticks.ToString()};
                 SqlDataReader reader = ProcedureReader("AddWork", nameParam, param, _connection);
             }
-            //todo return GetWork();
+            //todo return GetWork(); // indeed. Proper todos are visible in todo explorer and llok like this:
+            // TODO: read added work
             return new Product(idOrder, idEmployee, price, name, comment, dateCreation, term);
         }
 
-        public   IEnumerable<Product>  GetProducts(int idOrder)
+        public   IEnumerable<Product>  GetProducts(int idOrder) // mapper method, good choice
         {
             using (SqlConnection _connection = new SqlConnection(_connectionString))
             {
@@ -107,7 +120,7 @@ namespace EPAM.ServiceHelper.DAO
                         name: (string)reader["name"],
                         comment: (string)reader["comment"],
                         dateCreation: (DateTime)reader["dateCreation"],
-                        term: TimeSpan.FromTicks((long)reader["termTicks"])
+                        term: TimeSpan.FromTicks((long)reader["termTicks"]) // total work time can be calculated in a query (if you store it you have to ensure that the value is always correct)
                         );
                 }
             }
@@ -157,7 +170,7 @@ namespace EPAM.ServiceHelper.DAO
                 SqlDataReader reader = ProcedureReader("GetEmployee", new string[] { "id" }, new string[] { id.ToString() }, _connection);
                 if (reader.Read())
                 {
-                    return new Employee(
+                    return new Employee( // duplicated code of entity creation. I'd make a "mapper" method that would read reader and return ready entity
                     id: (int)reader["id"],
                     name: (string)reader["name"],
                     phonNumber: (string)reader["phonNumber"],
@@ -303,8 +316,13 @@ namespace EPAM.ServiceHelper.DAO
             }
             catch (Exception e )
             {
-                logger.Warn(e, $"Error prozedure {procedure}");
-                throw e;
+                logger.Warn(e, $"Error prozedure {procedure}"); // exception like this is Error, not a Warning. 
+                // If the app can't execute anymore and needs to crash - it's Fatal/Critical
+                // If the app can't finish action correctly it's Error
+                // If the app noticed something wrong, but it's only a minor inconvenience - then it's Warning
+                
+                // This is a favorite interview question "To throw, to throw e or to throw new Exception(e)". 
+                throw; // Here it's to throw - if you give throw an exception object, it'll rewrite stack trace and the actual place of exception will be lost
             }
       
          

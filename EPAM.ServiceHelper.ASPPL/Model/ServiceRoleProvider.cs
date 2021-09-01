@@ -10,7 +10,7 @@ public class ServiceRoleProvider : RoleProvider
 
 
     [Flags]
-    enum Roll 
+    enum Roll //roles?
     {
         none = Permissions.none,
         user = Permissions.editOrder,

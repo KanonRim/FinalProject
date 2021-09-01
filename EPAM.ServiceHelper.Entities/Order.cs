@@ -9,7 +9,7 @@ namespace EPAM.ServiceHelper.Entities
 
     public enum Status
     {
-        notProcessed,//поступил
+        notProcessed,//поступил // usually it's called Created, but this is also okay
         inWork,//в работе 
         waiting,//ожижат
         forApproval,//согласование 

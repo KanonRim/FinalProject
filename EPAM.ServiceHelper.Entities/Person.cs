@@ -10,7 +10,7 @@ namespace EPAM.ServiceHelper.Entities
     {
         public int Id { get; }
         public string Name { get; set; }
-        public string PhonNuber { get; set; }
+        public string PhonNuber { get; set; } // 2 typos in PhoneNumber.
         public string Comment { get; set; }
 
 

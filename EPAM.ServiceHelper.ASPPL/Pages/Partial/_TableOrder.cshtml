@@ -31,14 +31,14 @@
     {
         <tr>
 
-            @{
+            @{ // nice actually
                 var href = "/Pages/Order.cshtml?id=" + item.Id;
                 var price = logic.PriceOrder(item.Id);
                 var timeWork = item.DateCreation + logic.GetWorkingHours(item.Id) - DateTime.Now;
                 string color = "while";
                 if (timeWork < TimeSpan.Zero)
                 {
-                    color = "darkgoldenrod";
+                    color = "darkgoldenrod"; // better to have an .time-overdue CSS class (can use in multiple places and change in one + easier to toggle)
                 }
             }
             <td style="color: deepskyblue"> <a href=@href>@item.Id </a></td>

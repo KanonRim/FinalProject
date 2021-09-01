@@ -18,7 +18,7 @@
 
     if (order == null)
     {
-        logger.Warn("Запрос не существующего заказа");
+        logger.Warn("Запрос не существующего заказа"); // more like Info - user could manually come to this page and this page should return 404 and say that no order with this id exists. Not a bad situation
         throw new Exception("Не найден заказ");
     }
 

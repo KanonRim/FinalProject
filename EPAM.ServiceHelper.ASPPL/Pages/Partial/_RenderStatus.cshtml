@@ -12,7 +12,7 @@
     <div class="dropdown">
         @switch (status)
         {
-            case Status.notProcessed:
+            case Status.notProcessed: // bootstrap coloring isn't really for these purposes, but you could create a Dictionary<Status, (string text, string style)> and use it instead of repetitive switch
                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Новый
                 </button>

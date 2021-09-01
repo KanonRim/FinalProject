@@ -5,7 +5,7 @@ using System.Web.Security;
 using EPAM.ServiceHelper.Entities;
 using EPAM.ServiceHelper.InterfaceBLL;
 
-public class ServiceAuthentication
+public class ServiceAuthentication // To me seems like it's a business logic class
 {
         IBLL logic = DependencyResolver.Instance.Logic;
 
@@ -40,7 +40,7 @@ public class ServiceAuthentication
 
         }
 
-        public string HashPassword(string password)
+        public string HashPassword(string password) // Question - can you name hashing algorithm you used here? Is it strong? Is it fast?
         {
             byte[] salt;
             byte[] buffer2;

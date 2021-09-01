@@ -13,7 +13,7 @@ namespace EPAM.ServiceHelper.BLL
         private static IDAO _DAO;
         public ServiceHelperBLL(IDAO dAO)
         {
-            logger.Info("Int BLL");
+            logger.Info("Int BLL"); // Not a really useful log. Debug level at max
            _DAO = dAO;
         }
 
@@ -104,7 +104,7 @@ namespace EPAM.ServiceHelper.BLL
 
         public IEnumerable<Order> GetOrders(Status[] status)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(); // not good
         }
 
         public IEnumerable<Order> GetOrders(int count)
